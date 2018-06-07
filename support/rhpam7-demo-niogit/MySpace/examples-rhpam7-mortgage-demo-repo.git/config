@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	logallrefupdates = false
+	precomposeunicode = true
+[remote "origin"]
+	url = file:///Users/ddoyle/Development/github/jbossdemocentral/rhpam7-install-demo/target/jboss-eap-7.1/bin/.niogit/system/examples-rhpam7-mortgage-demo-repo.git/
+	fetch = +refs/*:refs/*
+	mirror = true
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
