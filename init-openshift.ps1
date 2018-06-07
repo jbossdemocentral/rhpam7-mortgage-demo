@@ -1,3 +1,6 @@
+$PRODUCT="Red Hat Process Automation Manager 7"
+$DEMO="Mortgage Demo"
+
 if ((Get-Command "oc" -ErrorAction SilentlyContinue) -eq $null)
 {
    Write-Output "The oc client tools need to be installed to connect to OpenShift."
@@ -12,7 +15,7 @@ Function Write-Host-Header($echo) {
   Write-Output "########################################################################"
 }
 
-$PRJ_DEMO="rhdm7-install"
+$PRJ_DEMO="rhpam7-mortgage"
 $PRJ_DEMO_NAME=((./support/openshift/provision.ps1 info $PRJ_DEMO 2>&1 | Select-String -Pattern "Project name") -split "\s+")[2]
 
 # Check if the project exists
@@ -29,6 +32,6 @@ if ($PRJ_EXISTS) {
   Start-Sleep -s 20
 }
 
-Write-Output "Provisioning Red Hat Decision Manager 7 Install Demo."
+Write-Output "Provisioning $PRODUCT $DEMO."
 ./support/openshift/provision.ps1 -command setup -demo $PRJ_DEMO -with-imagestreams
 Write-Output "Setup completed."
