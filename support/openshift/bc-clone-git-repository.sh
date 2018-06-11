@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#BUSINESS_CENTRAL_REST_URL="http://rhpam7-install-rhpamcentr-rhpam7-install-developer.192.168.64.10.nip.io/rest"
+#BUSINESS_CENTRAL_REST_URL="http://rhpam7-mortgage-rhpamcentr-rhpam7-mortgage-developer.192.168.64.10.nip.io/rest"
 BUSINESS_CENTRAL_REST_URL="http://rhpam7-mortgage-rhpamcentr:8080/rest"
 SPACE="MySpace"
 DEFAULT_GROUPID="com.myspace"
@@ -63,6 +63,8 @@ do
   let count=$count+5;
 done
 
+# Give the platform a bit of time before we request the project to be cloned. Not pretty, but don't see another way atm ...
+sleep 3
 
 # Check if the project is already present. If it is, we simply skip cloning
 #Create a space
