@@ -19,7 +19,7 @@ VERSION=7.0
 PROJECT_GIT_REPO=https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo
 PROJECT_GIT_BRANCH=master
 PROJECT_GIT_DIR=./support/demo_project_git
-PROJECT_GIT_REPO_NAME=rhpam7-mortgage-demo-repo.git
+PROJECT_GIT_REPO_NAME=examples-rhpam7-mortgage-demo-repo.git
 OFFLINE_MODE=false
 
 # wipe screen.
