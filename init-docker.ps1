@@ -75,7 +75,7 @@ Copy-Item "$SUPPORT_DIR\docker\.dockerignore" "$PROJECT_HOME" -force
 
 Write-Host "Starting Docker build.`n"
 
-$argList = "build -t jbossdemocentral/rhpam7-install-demo $PROJECT_HOME"
+$argList = "build -t jbossdemocentral/rhpam7-mortgage-demo $PROJECT_HOME"
 $process = (Start-Process -FilePath docker.exe -ArgumentList $argList -Wait -PassThru -NoNewWindow)
 Write-Host "`n"
 
@@ -88,18 +88,18 @@ Write-Host "Docker build finished.`n"
 
 Remove-Item "$PROJECT_HOME\Dockerfile" -Force
 
-Write-Host "=================================================================================="
+Write-Host "==================================================================================="
 Write-Host "=                                                                                ="
-Write-Host "=  You can now start the $PRODUCT in a Docker container with:              ="
-Write-Host "=                                                                                ="
-Write-Host "=  docker run -it -p 8080:8080 -p 9990:9990 jbossdemocentral/rhpam7-install-demo ="
-Write-Host "=                                                                                ="
-Write-Host "=  Login into Business Central at:                                               ="
-Write-Host "=                                                                                ="
-Write-Host "=    http://localhost:8080/business-central  (u:dmAdmin / p:redhatdm1!)          ="
-Write-Host "=                                                                                ="
-Write-Host "=  See README.md for general details to run the various demo cases.              ="
-Write-Host "=                                                                                ="
-Write-Host "=  $PRODUCT $VERSION $DEMO Setup Complete.                        ="
-Write-Host "=                                                                                ="
-Write-Host "=================================================================================="
+Write-Host "=  You can now start the $PRODUCT in a Docker container with:               ="
+Write-Host "=                                                                                 ="
+Write-Host "=  docker run -it -p 8080:8080 -p 9990:9990 jbossdemocentral/rhpam7-mortgage-demo ="
+Write-Host "=                                                                                 ="
+Write-Host "=  Login into Business Central at:                                                ="
+Write-Host "=                                                                                 ="
+Write-Host "=    http://localhost:8080/business-central  (u:dmAdmin / p:redhatdm1!)           ="
+Write-Host "=                                                                                 ="
+Write-Host "=  See README.md for general details to run the various demo cases.               ="
+Write-Host "=                                                                                 ="
+Write-Host "=  $PRODUCT $VERSION $DEMO Setup Complete.                         ="
+Write-Host "=                                                                                 ="
+Write-Host "==================================================================================="

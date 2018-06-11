@@ -88,7 +88,7 @@ cp support/docker/.dockerignore .
 echo Starting Docker build.
 echo
 
-docker build -t jbossdemocentral/rhpam7-install-demo .
+docker build -t jbossdemocentral/rhpam7-mortgage-demo .
 
 if [ $? -ne 0 ]; then
         echo
@@ -103,17 +103,17 @@ echo
 rm Dockerfile
 
 echo
-echo "=================================================================================="
-echo "=                                                                                ="
-echo "=  You can now start the $PRODUCT in a Docker container with: ="
-echo "=                                                                                ="
-echo "=  docker run -it -p 8080:8080 -p 9990:9990 jbossdemocentral/rhpam7-install-demo ="
-echo "=                                                                                ="
-echo "=  Login into Business Central at:                                               ="
-echo "=                                                                                ="
-echo "=    http://localhost:8080/business-central  (u:pamAdmin / p:redhatpam1!)        ="
-echo "=                                                                                ="
-echo "=                                                                                ="
-echo "=  $PRODUCT $VERSION $DEMO Setup Complete.                  ="
-echo "=                                                                                ="
-echo "=================================================================================="
+echo "==================================================================================="
+echo "=                                                                                 ="
+echo "=  You can now start the $PRODUCT in a Docker container with:  ="
+echo "=                                                                                 ="
+echo "=  docker run -it -p 8080:8080 -p 9990:9990 jbossdemocentral/rhpam7-mortgage-demo ="
+echo "=                                                                                 ="
+echo "=  Login into Business Central at:                                                ="
+echo "=                                                                                 ="
+echo "=    http://localhost:8080/business-central  (u:pamAdmin / p:redhatpam1!)         ="
+echo "=                                                                                 ="
+echo "=                                                                                 ="
+echo "=  $PRODUCT $VERSION $DEMO Setup Complete.                   ="
+echo "=                                                                                 ="
+echo "==================================================================================="
