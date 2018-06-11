@@ -24,7 +24,7 @@ $VERSION="7.0"
 $PROJECT_GIT_REPO="https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo"
 $PROJECT_GIT_BRANCH="master"
 $PROJECT_GIT_DIR="$PROJECT_HOME\support\demo_project_git"
-$PROJECT_GIT_REPO_NAME="rhpam7-mortgage-demo-repo.git"
+$PROJECT_GIT_REPO_NAME="examples-rhpam7-mortgage-demo-repo.git"
 $OFFLINE_MODE="false"
 
 If ($h) {
@@ -197,7 +197,7 @@ If (! $o) {
   If (Test-Path "$PROJECT_HOME\target\temp") {
 	Remove-Item "$PROJECT_HOME\target\temp" -Force -Recurse
   }
-  $argList = "clone --bare $PROJECT_GIT_REPO $PROJECT_HOME\target\temp\bpms-specialtripsagency.git"
+  $argList = "clone --bare $PROJECT_GIT_REPO $PROJECT_HOME\target\temp\$PROJECT_GIT_REPO_NAME"
   $gitProcess = (Start-Process -FilePath "git" -ArgumentList $argList -Wait -PassThru -NoNewWindow)
   If ($gitProcess.ExitCode -ne 0) {
 		Write-Host "Error cloning the project's Git repo. If there is no Internet connection available, please run this script in 'offline-mode' ('-o') to use a previously downloaded and cached version of the project's Git repo... Aborting"
