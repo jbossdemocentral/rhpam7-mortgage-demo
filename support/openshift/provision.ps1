@@ -246,6 +246,8 @@ Function Create-Application() {
     $IMAGE_STREAM_NAMESPACE=$($PRJ[0])
   }
 
+  oc create configmap setup-demo-scripts --from-file=$SCRIPT_DIR/bc-clone-git-repository.sh
+
   $argList = "new-app --template=rhpam70-authoring"`
       + " -p APPLICATION_NAME=""$ARG_DEMO""" `
       + " -p IMAGE_STREAM_NAMESPACE=""$IMAGE_STREAM_NAMESPACE""" `
@@ -262,7 +264,9 @@ Function Create-Application() {
 
   Call-Oc $argList $True "Error creating application." $True
 
-  oc create configmap setup-demo-scripts --from-file=$SCRIPT_DIR/bc-clone-git-repository.sh
+  # Give the system some time to create the DC, etc. before we trigger a deployment config change.
+  Start-Sleep -s 5
+
   oc set volume dc/rhpam7-mortgage-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts  --mount-path=/tmp/config-files
   oc set deployment-hook dc/rhpam7-mortgage-rhpamcentr --post -c rhpam7-mortgage-rhpamcentr -e BC_URL="http://rhpam7-mortgage-rhpamcent" -v config-volume --failure-policy=abort -- /bin/bash /tmp/config-files/bc-clone-git-repository.sh
 }
