@@ -18,7 +18,7 @@ function usage() {
     echo " $0 --help"
     echo
     echo "Example:"
-    echo " $0 setup rhdm7-install --project-suffix s40d"
+    echo " $0 setup rhdm7-mortgage --project-suffix s40d"
     echo
     echo "COMMANDS:"
     echo "   setup                    Set up the demo projects and deploy demo apps"
@@ -28,7 +28,7 @@ function usage() {
     echo "   idle                     Make all demo services idle"
     echo
     echo "DEMOS:"
-    echo "   rhpam7-install            Red Hat Process Automation Install demo"
+    echo "   rhpam7-mortgage            Red Hat Process Automation Mortgage demo"
     echo
     echo "OPTIONS:"
     echo "   --user [username]         The admin user for the demo projects. mandatory if logged in as system:admin"
@@ -152,7 +152,7 @@ OPENSHIFT_USER=${ARG_USERNAME:-$LOGGEDIN_USER}
 
 # Project name needs to be unique across OpenShift Online
 PRJ_SUFFIX=${ARG_PROJECT_SUFFIX:-`echo $OPENSHIFT_USER | sed -e 's/[^-a-z0-9]/-/g'`}
-PRJ=("rhpam7-install-$PRJ_SUFFIX" "RHPAM7 Install Demo" "Red Hat Process Automation Manager 7 Install Demo")
+PRJ=("rhpam7-mortgage-$PRJ_SUFFIX" "RHPAM7 Mortgage Demo" "Red Hat Process Automation Manager 7 Mortgage Demo")
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -164,12 +164,16 @@ KIE_SERVER_CONTROLLER_PWD=kieserver1!
 KIE_SERVER_USER=kieserver
 KIE_SERVER_PWD=kieserver1!
 
+#OpenShift Template Parameters
+#GitHub tag referencing the image streams and templates.
+OPENSHIFT_PAM7_TEMPLATES_TAG=rhpam70
+
 
 ################################################################################
 # DEMO MATRIX                                                                  #
 ################################################################################
 case $ARG_DEMO in
-    rhpam7-install)
+    rhpam7-mortgage)
       DEMO_NAME=${PRJ[2]}
 	    ;;
     *)
@@ -241,23 +245,29 @@ function create_projects() {
 
 function import_imagestreams_and_templates() {
   echo_header "Importing Image Streams"
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/rhpam70-image-streams.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/rhpam70-image-streams.yaml
 
   echo_header "Importing Templates"
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/businesscentral/image.yaml
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/businesscentral-monitoring/image.yaml
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/kieserver/image.yaml
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/controller/image.yaml
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/smartrouter/image.yaml
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/elasticsearch/image.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-authoring.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-kieserver-externaldb.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-kieserver-mysql.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-kieserver-postgresql.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-prod-immutable-kieserver.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-prod-immutable-monitor.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-sit.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam70-trial-ephemeral.yaml
 }
 
 
 function import_secrets_and_service_account() {
   echo_header "Importing secrets and service account."
-  #oc create -f https://raw.githubusercontent.com/jboss-container-images/rhdm-7-openshift-image/rhdm70-dev/decisioncentral-app-secret.yaml
-  #oc create -f https://raw.githubusercontent.com/jboss-container-images/rhdm-7-openshift-image/rhdm70-dev/kieserver-app-secret.yaml
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/rhpam70-dev/example-app-secret-template.yaml
+  oc process -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/example-app-secret-template.yaml | oc create -f -
+  oc process -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/example-app-secret-template.yaml -p SECRET_NAME=kieserver-app-secret | oc create -f -
+
+  oc create serviceaccount businesscentral-service-account
+  oc create serviceaccount kieserver-service-account
+  oc secrets link --for=mount businesscentral-service-account businesscentral-app-secret
+  oc secrets link --for=mount kieserver-service-account kieserver-app-secret
 }
 
 function create_application() {
@@ -269,19 +279,23 @@ function create_application() {
     IMAGE_STREAM_NAMESPACE=${PRJ[0]}
   fi
 
-  oc new-app --template=rhpam70-full-persistent \
-			-p APPLICATION_NAME="$ARG_DEMO" \
-			-p IMAGE_STREAM_NAMESPACE="$IMAGE_STREAM_NAMESPACE" \
-			-p KIE_ADMIN_USER="$KIE_ADMIN_USER" \
-			-p KIE_ADMIN_PWD="$KIE_ADMIN_PWD" \
-			-p KIE_SERVER_CONTROLLER_USER="$KIE_SERVER_CONTROLLER_USER" \
-			-p KIE_SERVER_CONTROLLER_PWD="$KIE_SERVER_CONTROLLER_PWD" \
-			-p KIE_SERVER_USER="$KIE_SERVER_USER" \
-			-p KIE_SERVER_PWD="$KIE_SERVER_PWD" \
-			-p MAVEN_REPO_USERNAME="$KIE_ADMIN_USER" \
-			-p MAVEN_REPO_PASSWORD="$KIE_ADMIN_PWD" \
-      -p BUSINESS_CENTRAL_VOLUME_CAPACITY="$ARG_PV_CAPACITY"
+  oc new-app --template=rhpam70-authoring \
+  -p APPLICATION_NAME="$ARG_DEMO" \
+  -p IMAGE_STREAM_NAMESPACE="$IMAGE_STREAM_NAMESPACE" \
+  -p IMAGE_STREAM_TAG="1.0" \
+  -p KIE_ADMIN_USER="$KIE_ADMIN_USER" \
+  -p KIE_ADMIN_PWD="$KIE_ADMIN_PWD" \
+  -p KIE_SERVER_CONTROLLER_USER="$KIE_SERVER_CONTROLLER_USER" \
+  -p KIE_SERVER_CONTROLLER_PWD="$KIE_SERVER_CONTROLLER_PWD" \
+  -p KIE_SERVER_USER="$KIE_SERVER_USER" \
+  -p KIE_SERVER_PWD="$KIE_SERVER_PWD" \
+  -p BUSINESS_CENTRAL_HTTPS_SECRET="businesscentral-app-secret" \
+  -p KIE_SERVER_HTTPS_SECRET="kieserver-app-secret" \
+  -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi"
 
+  oc create configmap setup-demo-scripts --from-file=$SCRIPT_DIR/bc-clone-git-repository.sh
+  oc set volume dc/rhpam7-mortgage-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts  --mount-path=/tmp/config-files
+  oc set deployment-hook dc/rhpam7-mortgage-rhpamcentr --post -c rhpam7-mortgage-rhpamcentr -e BC_URL="http://rhpam7-mortgage-rhpamcent" -v config-volume --failure-policy=abort -- /bin/bash /tmp/config-files/bc-clone-git-repository.sh
 }
 
 function build_and_deploy() {
