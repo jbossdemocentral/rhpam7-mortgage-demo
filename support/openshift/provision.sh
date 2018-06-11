@@ -295,6 +295,7 @@ function create_application() {
   -p KIE_SERVER_HTTPS_SECRET="kieserver-app-secret" \
   -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi"
 
+  # Give the system some time to create the DC, etc. before we trigger a deployment config change.
   sleep 5
 
   oc set volume dc/rhpam7-mortgage-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts --mount-path=/tmp/config-files
