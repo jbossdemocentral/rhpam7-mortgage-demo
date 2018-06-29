@@ -1,22 +1,5 @@
 #!/bin/sh
-DEMO="Mortgage Demo"
-AUTHORS="Red Hat"
-PROJECT="git@github.com:jbossdemocentral/rhpam7-mortgage-demo.git"
-PRODUCT="Red Hat Process Automation Manager"
-TARGET=./target
-JBOSS_HOME=$TARGET/jboss-eap-7.1
-SERVER_DIR=$JBOSS_HOME/standalone/deployments
-SERVER_CONF=$JBOSS_HOME/standalone/configuration/
-SERVER_BIN=$JBOSS_HOME/bin
-SRC_DIR=./installs
-SUPPORT_DIR=./support
-PAM_VERSION=7.0.0
-PAM_BUSINESS_CENTRAL=rhpam-$PAM_VERSION-business-central-eap7-deployable.zip
-PAM_KIE_SERVER=rhpam-$PAM_VERSION-kie-server-ee7.zip
-EAP=jboss-eap-7.1.0.zip
-#EAP_PATCH=jboss-eap-6.4.7-patch.zip
-VERSION=7.0
-
+. init-properties.sh
 # wipe screen.
 clear
 
@@ -88,7 +71,7 @@ cp support/docker/.dockerignore .
 echo Starting Docker build.
 echo
 
-docker build -t jbossdemocentral/rhpam7-mortgage-demo .
+docker build --no-cache -t jbossdemocentral/rhpam7-mortgage-demo --build-arg PAM_VERSION=$PAM_VERSION --build-arg PAM_BUSINESS_CENTRAL=$PAM_BUSINESS_CENTRAL --build-arg PAM_KIE_SERVER=$PAM_KIE_SERVER --build-arg EAP=$EAP .
 
 if [ $? -ne 0 ]; then
         echo

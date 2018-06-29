@@ -1,6 +1,8 @@
-  #!/bin/sh
+#!/bin/sh
 #!/bin/bash
 set -e
+
+. provision-properties-static.sh
 
 command -v oc >/dev/null 2>&1 || {
   echo >&2 "The oc client tools need to be installed to connect to OpenShift.";
@@ -18,7 +20,7 @@ function usage() {
     echo " $0 --help"
     echo
     echo "Example:"
-    echo " $0 setup rhdm7-mortgage --project-suffix s40d"
+    echo " $0 setup $PRJ_NAME --project-suffix s40d"
     echo
     echo "COMMANDS:"
     echo "   setup                    Set up the demo projects and deploy demo apps"
@@ -28,7 +30,7 @@ function usage() {
     echo "   idle                     Make all demo services idle"
     echo
     echo "DEMOS:"
-    echo "   rhpam7-mortgage            Red Hat Process Automation Mortgage demo"
+    echo "   $PRJ_NAME                $PRJ_DESCRIPTION"
     echo
     echo "OPTIONS:"
     echo "   --user [username]         The admin user for the demo projects. mandatory if logged in as system:admin"
@@ -150,10 +152,10 @@ done
 LOGGEDIN_USER=$(oc whoami)
 OPENSHIFT_USER=${ARG_USERNAME:-$LOGGEDIN_USER}
 
-# Project name needs to be unique across OpenShift Online
-PRJ_SUFFIX=${ARG_PROJECT_SUFFIX:-`echo $OPENSHIFT_USER | sed -e 's/[^-a-z0-9]/-/g'`}
-PRJ=("rhpam7-mortgage-$PRJ_SUFFIX" "RHPAM7 Mortgage Demo" "Red Hat Process Automation Manager 7 Mortgage Demo")
+# Demo specific properties.
+. provision-properties-dynamic.sh
 
+# Project name needs to be unique across OpenShift Online
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # KIE Parameters
@@ -173,7 +175,7 @@ OPENSHIFT_PAM7_TEMPLATES_TAG=rhpam70
 # DEMO MATRIX                                                                  #
 ################################################################################
 case $ARG_DEMO in
-    rhpam7-mortgage)
+    $PRJ_NAME)
       DEMO_NAME=${PRJ[2]}
 	    ;;
     *)
@@ -298,8 +300,8 @@ function create_application() {
   # Give the system some time to create the DC, etc. before we trigger a deployment config change.
   sleep 5
 
-  oc set volume dc/rhpam7-mortgage-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts --mount-path=/tmp/config-files
-  oc set deployment-hook dc/rhpam7-mortgage-rhpamcentr --post -c rhpam7-mortgage-rhpamcentr -e BC_URL="http://rhpam7-mortgage-rhpamcent" -v config-volume --failure-policy=abort -- /bin/bash /tmp/config-files/bc-clone-git-repository.sh
+  oc set volume dc/$ARG_DEMO-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts --mount-path=/tmp/config-files
+  oc set deployment-hook dc/$ARG_DEMO-rhpamcentr --post -c $ARG_DEMO-rhpamcentr -e BC_URL="http://$ARG_DEMO-rhpamcent" -v config-volume --failure-policy=abort -- /bin/bash /tmp/config-files/bc-clone-git-repository.sh
 
 }
 

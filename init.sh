@@ -1,22 +1,7 @@
 #!/bin/sh
-DEMO="Mortgage Demo"
-AUTHORS="Red Hat"
-PROJECT="git@github.com:jbossdemocentral/rhpam7-mortgage-demo.git"
-PRODUCT="Red Hat Process Automation Manager"
-TARGET=./target
-JBOSS_HOME=$TARGET/jboss-eap-7.1
-SERVER_DIR=$JBOSS_HOME/standalone/deployments
-SERVER_CONF=$JBOSS_HOME/standalone/configuration/
-SERVER_BIN=$JBOSS_HOME/bin
-SRC_DIR=./installs
-SUPPORT_DIR=./support
-PAM_VERSION=7.0.0
-PAM_BUSINESS_CENTRAL=rhpam-$PAM_VERSION-business-central-eap7-deployable.zip
-PAM_KIE_SERVER=rhpam-$PAM_VERSION-kie-server-ee7.zip
-EAP=jboss-eap-7.1.0.zip
-#EAP_PATCH=jboss-eap-6.4.7-patch.zip
-VERSION=7.0
-PROJECT_GIT_REPO=https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo
+. init-properties.sh
+
+# Additional properties
 PROJECT_GIT_BRANCH=master
 PROJECT_GIT_DIR=./support/demo_project_git
 PROJECT_GIT_REPO_NAME=examples-rhpam7-mortgage-demo-repo.git
@@ -215,7 +200,7 @@ else
   fi
 fi
 # Copy the repo to the JBoss BPMSuite installation directory.
-rm -rf $SERVER_BIN/.niogit/MySpace/$PROJECT_GIT_REPO_NAME && cp -R $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME $SERVER_BIN/.niogit/MySpace/$PROJECT_GIT_REPO_NAME
+rm -rf $SERVER_BIN/.niogit/$NIOGIT_PROJECT_GIT_REPO && cp -R $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME $SERVER_BIN/.niogit/$NIOGIT_PROJECT_GIT_REPO
 
 echo "  - setting up standalone.xml configuration adjustments..."
 echo
