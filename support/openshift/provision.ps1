@@ -11,7 +11,10 @@ param (
     [switch]$help = $false
 )
 
-. .\provision-properties-static.ps1
+$SCRIPT_DIR= Split-Path $myInvocation.MyCommand.Path
+
+
+. $SCRIPT_DIR\provision-properties-static.ps1
 
 #TODO Implement validation of parameters like in the bash script, for example to verify correctness of the username.
 
@@ -98,9 +101,7 @@ if (-not ([string]::IsNullOrEmpty($ARG_USERNAME)))
 
 #$PRJ=@("rhpam7-mortgage-$PRJ_SUFFIX","RHPAM7 Mortgage Demo","Red Hat Process Automation Manager 7 Mortgage Demo")
 
-. .\provision-properties-dynamic.ps1
-
-$SCRIPT_DIR= Split-Path $myInvocation.MyCommand.Path
+. $SCRIPT_DIR\provision-properties-dynamic.ps1
 
 # KIE Parameters
 $KIE_ADMIN_USER="pamAdmin"
