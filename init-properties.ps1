@@ -18,5 +18,5 @@ $EAP="jboss-eap-7.1.0.zip"
 #$EAP_PATCH="jboss-eap-6.4.7-patch.zip"
 $VERSION="7.0"
 $PROJECT_GIT_REPO="https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo"
-$PROJECT_GIT_REPO_NAME=examples-rhpam7-mortgage-demo-repo.git
+$PROJECT_GIT_REPO_NAME="examples-rhpam7-mortgage-demo-repo.git"
 $NIOGIT_PROJECT_GIT_REPO="MySpace/$PROJECT_GIT_REPO_NAME"

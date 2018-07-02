@@ -1,3 +1,8 @@
+Param(
+    [switch]$h,
+    [switch]$o
+)
+
 . .\init-properties.ps1
 
 # Additional properties
@@ -9,13 +14,16 @@ $OFFLINE_MODE="false"
 # wipe screen
 Clear-Host
 
-
 If ($h) {
 	Write-Host "Usage: init.ps1 [args...]"
     Write-Host "where args include:"
     Write-Host "    -o              run this script in offline mode. The project's Git repo will not be downloaded. Instead a cached version will be used if available."
     Write-Host "    -h              prints this help."
 	exit
+}
+
+If ($o) {
+  $OFFLINE_MODE="true"
 }
 
 Write-Host "######################################################################"
