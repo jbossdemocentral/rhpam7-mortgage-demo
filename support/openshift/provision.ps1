@@ -11,6 +11,11 @@ param (
     [switch]$help = $false
 )
 
+$SCRIPT_DIR= Split-Path $myInvocation.MyCommand.Path
+
+
+. $SCRIPT_DIR\provision-properties-static.ps1
+
 #TODO Implement validation of parameters like in the bash script, for example to verify correctness of the username.
 
 if ((Get-Command "oc" -ErrorAction SilentlyContinue) -eq $null)
@@ -33,7 +38,7 @@ Function Usage() {
   Write-Output " $scriptName -help"
   Write-Output ""
   Write-Output "Example:"
-  Write-Output " $scriptName -command setup -demo rhdm7-mortgage -project-suffix s40d"
+  Write-Output " $scriptName -command setup -demo $PRJ_NAME -project-suffix s40d"
   Write-Output ""
   Write-Output "COMMANDS:"
   Write-Output "   setup                    Set up the demo projects and deploy demo apps"
@@ -43,7 +48,7 @@ Function Usage() {
   Write-Output "   idle                     Make all demo services idle"
   Write-Output ""
   Write-Output "DEMOS:"
-  Write-Output "   rhdm7-mortgage            Red Hat Decision Manager Mortgage demo"
+  Write-Output "   $PRJ_NAME                $PRJ_DESCRIPTION"
   Write-Output ""
   Write-Output "OPTIONS:"
   Write-Output "   -user [username]         The admin user for the demo projects. mandatory if logged in as system:admin"
@@ -86,16 +91,17 @@ if (-not ([string]::IsNullOrEmpty($ARG_USERNAME)))
   $OPENSHIFT_USER = $LOGGEDIN_USER
 }
 
-if (-not ([string]::IsNullOrEmpty($ARG_PROJECT_SUFFIX)))
-{
-  $PRJ_SUFFIX = $ARG_PROJECT_SUFFIX
-} else {
-  $PRJ_SUFFIX =  %{$OPENSHIFT_USER -creplace "[^-a-z0-9]","-"}
-}
 
-$PRJ=@("rhpam7-mortgage-$PRJ_SUFFIX","RHPAM7 Mortgage Demo","Red Hat Process Automation Manager 7 Mortgage Demo")
+#if (-not ([string]::IsNullOrEmpty($ARG_PROJECT_SUFFIX)))
+#{
+#  $PRJ_SUFFIX = $ARG_PROJECT_SUFFIX
+#} else {
+#  $PRJ_SUFFIX =  %{$OPENSHIFT_USER -creplace "[^-a-z0-9]","-"}
+#}
 
-$SCRIPT_DIR= Split-Path $myInvocation.MyCommand.Path
+#$PRJ=@("rhpam7-mortgage-$PRJ_SUFFIX","RHPAM7 Mortgage Demo","Red Hat Process Automation Manager 7 Mortgage Demo")
+
+. $SCRIPT_DIR\provision-properties-dynamic.ps1
 
 # KIE Parameters
 $KIE_ADMIN_USER="pamAdmin"
@@ -116,7 +122,7 @@ $OPENSHIFT_PAM7_TEMPLATES_TAG="rhpam70"
 
 switch ( $ARG_DEMO )
 {
-  "rhpam7-mortgage" {
+  "$PRJ_NAME" {
     $DEMO_NAME=$($PRJ[2])
   }
   default {
@@ -267,8 +273,8 @@ Function Create-Application() {
   # Give the system some time to create the DC, etc. before we trigger a deployment config change.
   Start-Sleep -s 5
 
-  oc set volume dc/rhpam7-mortgage-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts  --mount-path=/tmp/config-files
-  oc set deployment-hook dc/rhpam7-mortgage-rhpamcentr --post -c rhpam7-mortgage-rhpamcentr -e BC_URL="http://rhpam7-mortgage-rhpamcent" -v config-volume --failure-policy=abort -- /bin/bash /tmp/config-files/bc-clone-git-repository.sh
+  oc set volume dc/$ARG_DEMO-rhpamcentr --add --name=config-volume --configmap-name=setup-demo-scripts  --mount-path=/tmp/config-files
+  oc set deployment-hook dc/$ARG_DEMO-rhpamcentr --post -c $ARG_DEMO-rhpamcentr -e BC_URL="http://$ARG_DEMO-rhpamcent" -v config-volume --failure-policy=abort -- /bin/bash /tmp/config-files/bc-clone-git-repository.sh
 }
 
 Function Build-And-Deploy() {

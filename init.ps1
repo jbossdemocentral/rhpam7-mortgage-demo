@@ -1,31 +1,18 @@
+Param(
+    [switch]$h,
+    [switch]$o
+)
 
-# wipe screen
-Clear-Host
+. .\init-properties.ps1
 
-$PROJECT_HOME = $PSScriptRoot
-$DEMO="Mortgage Demo"
-$AUTHORS="Red Hat"
-$PROJECT="git@github.com:jbossdemocentral/rhpam7-mortgage-demo.git"
-$PRODUCT="Red Hat Procss Automation Manager"
-$TARGET="$PROJECT_HOME\target"
-$JBOSS_HOME="$TARGET\jboss-eap-7.1"
-$SERVER_DIR="$JBOSS_HOME\standalone\deployments\"
-$SERVER_CONF="$JBOSS_HOME\standalone\configuration\"
-$SERVER_BIN="$JBOSS_HOME\bin"
-$SRC_DIR="$PROJECT_HOME\installs"
-$SUPPORT_DIR="$PROJECT_HOME\support"
-$PRJ_DIR="$PROJECT_HOME\projects"
-$PAM_VERSION="7.0.0"
-$PAM_BUSINESS_CENTRAL="rhpam-$PAM_VERSION-business-central-eap7-deployable.zip"
-$PAM_KIE_SERVER="rhpam-$PAM_VERSION-kie-server-ee7.zip"
-$EAP="jboss-eap-7.1.0.zip"
-#$EAP_PATCH="jboss-eap-6.4.7-patch.zip"
-$VERSION="7.0"
-$PROJECT_GIT_REPO="https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo"
+# Additional properties
 $PROJECT_GIT_BRANCH="master"
 $PROJECT_GIT_DIR="$PROJECT_HOME\support\demo_project_git"
 $PROJECT_GIT_REPO_NAME="examples-rhpam7-mortgage-demo-repo.git"
 $OFFLINE_MODE="false"
+
+# wipe screen
+Clear-Host
 
 If ($h) {
 	Write-Host "Usage: init.ps1 [args...]"
@@ -33,6 +20,10 @@ If ($h) {
     Write-Host "    -o              run this script in offline mode. The project's Git repo will not be downloaded. Instead a cached version will be used if available."
     Write-Host "    -h              prints this help."
 	exit
+}
+
+If ($o) {
+  $OFFLINE_MODE="true"
 }
 
 Write-Host "######################################################################"
@@ -220,8 +211,8 @@ If (! $o) {
   }
 }
 # Copy the repo to the JBoss BPMSuite installation directory.
-Remove-Item "$SERVER_BIN\.niogit\MySpace\$PROJECT_GIT_REPO_NAME" -Force -Recurse
-Copy-Item "$PROJECT_GIT_DIR\$PROJECT_GIT_REPO_NAME" "$SERVER_BIN\.niogit\MySpace\$PROJECT_GIT_REPO_NAME" -force -recurse
+Remove-Item "$SERVER_BIN\.niogit\$NIOGIT_PROJECT_GIT_REPO" -Force -Recurse
+Copy-Item "$PROJECT_GIT_DIR\$PROJECT_GIT_REPO_NAME" "$SERVER_BIN\.niogit\$NIOGIT_PROJECT_GIT_REPO" -force -recurse
 
 ################################# End setup demo projects ##########################################
 

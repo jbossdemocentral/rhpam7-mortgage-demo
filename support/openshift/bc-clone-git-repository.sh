@@ -1,12 +1,6 @@
 #!/bin/sh
 
-#BUSINESS_CENTRAL_REST_URL="http://rhpam7-mortgage-rhpamcentr-rhpam7-mortgage-developer.192.168.64.10.nip.io/rest"
-BUSINESS_CENTRAL_REST_URL="http://rhpam7-mortgage-rhpamcentr:8080/rest"
-SPACE="MySpace"
-DEFAULT_GROUPID="com.myspace"
-PROJECT_GIT="https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo.git"
-PROJECT_ID="rhpam7-mortgage-demo-repo"
-PROJECT_NAME="Mortgage_Demo"
+. provision-properties-static.sh
 STARTUP_WAIT=60
 
 #First check if the PAM 7 Business Central REST API is available. We'll wait for 60 seconds

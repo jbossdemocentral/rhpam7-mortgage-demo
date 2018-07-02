@@ -1,5 +1,4 @@
-$PRODUCT="Red Hat Process Automation Manager 7"
-$DEMO="Mortgage Demo"
+. .\init-properties.ps1
 
 if ((Get-Command "oc" -ErrorAction SilentlyContinue) -eq $null)
 {

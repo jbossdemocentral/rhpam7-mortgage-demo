@@ -1,7 +1,5 @@
 #!/bin/sh
-
-PRODUCT="Red Hat Process Automation Manager 7"
-DEMO="Mortgage Demo"
+. init-properties.sh
 
 command -v oc >/dev/null 2>&1 || {
   echo >&2 "The oc client tools need to be installed to connect to OpenShift.";
