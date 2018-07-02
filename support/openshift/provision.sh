@@ -2,7 +2,9 @@
 #!/bin/bash
 set -e
 
-. provision-properties-static.sh
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+. $SCRIPT_DIR/provision-properties-static.sh
 
 command -v oc >/dev/null 2>&1 || {
   echo >&2 "The oc client tools need to be installed to connect to OpenShift.";
@@ -153,10 +155,10 @@ LOGGEDIN_USER=$(oc whoami)
 OPENSHIFT_USER=${ARG_USERNAME:-$LOGGEDIN_USER}
 
 # Demo specific properties.
-. provision-properties-dynamic.sh
+. $SCRIPT_DIR/provision-properties-dynamic.sh
 
 # Project name needs to be unique across OpenShift Online
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 
 # KIE Parameters
 KIE_ADMIN_USER=pamAdmin
