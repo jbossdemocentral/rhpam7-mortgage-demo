@@ -168,11 +168,6 @@ KIE_SERVER_CONTROLLER_PWD=kieserver1!
 KIE_SERVER_USER=kieserver
 KIE_SERVER_PWD=kieserver1!
 
-#OpenShift Template Parameters
-#GitHub tag referencing the image streams and templates.
-OPENSHIFT_PAM7_TEMPLATES_TAG=rhpam70
-
-
 ################################################################################
 # DEMO MATRIX                                                                  #
 ################################################################################
