@@ -247,7 +247,7 @@ Function Create-Application() {
     $IMAGE_STREAM_NAMESPACE=$($PRJ[0])
   }
 
-  oc create configmap setup-demo-scripts --from-file=$SCRIPT_DIR/bc-clone-git-repository.sh
+  oc create configmap setup-demo-scripts --from-file=$SCRIPT_DIR/bc-clone-git-repository.sh,,$SCRIPT_DIR/provision-properties-static.sh
 
   $argList = "new-app --template=rhpam70-authoring"`
       + " -p APPLICATION_NAME=""$ARG_DEMO""" `

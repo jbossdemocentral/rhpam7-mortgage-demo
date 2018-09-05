@@ -1,6 +1,9 @@
 #!/bin/sh
 
-. provision-properties-static.sh
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+. $SCRIPT_DIR/provision-properties-static.sh
+
 STARTUP_WAIT=60
 
 #First check if the PAM 7 Business Central REST API is available. We'll wait for 60 seconds
@@ -37,7 +40,7 @@ if [ $STATUSCODE -ne 202 ] ; then
     echo "Error creating new Space. Exiting"
     exit 1
 else
-    echo "Creating new Space."
+    echo "Creating new Space: $SPACE"
 fi
 
 # Wait for the space to be created
@@ -48,7 +51,7 @@ until [ $count -gt $STARTUP_WAIT ]
 do
   curl -u pamAdmin:redhatpam1! --output /dev/null --silent --head --fail "$BUSINESS_CENTRAL_REST_URL/spaces/$SPACE"
   if [ $? -eq 0 ] ; then
-    echo "\nSpace created."
+    echo "Space created."
     created=true
     break
   fi
@@ -61,12 +64,12 @@ done
 sleep 3
 
 # Check if the project is already present. If it is, we simply skip cloning
-#Create a space
-curl -u pamAdmin:redhatpam1! --output /dev/null --silent --fail "$BUSINESS_CENTRAL_REST_URL/spaces/$SPACE/projects/$PROJECT_NAME"
+#Clone project
+curl -u pamAdmin:redhatpam1! --output /dev/null --silent --fail "$BUSINESS_CENTRAL_REST_URL/spaces/$SPACE/projects/$PRJ_NAME"
 if [ $? -ne 0 ] ; then
    echo "Cloning project.."
    # And clone the project into that space
-   CLONE_GIT_JSON="{\"name\":\"$PROJECT_ID\", \"gitURL\":\"$PROJECT_GIT\"}"
+   CLONE_GIT_JSON="{\"name\":\"$PROJECT_ID\", \"gitURL\":\"$PROJECT_GIT_REPO\"}"
    STATUSCODE=$(curl -H "Accept: application/json" -H "Content-Type: application/json" -f -X POST  -d "$CLONE_GIT_JSON" -u "pamAdmin:redhatpam1!" --silent --output /dev/null --write-out "%{http_code}" "$BUSINESS_CENTRAL_REST_URL/spaces/$SPACE/git/clone")
    if [ $STATUSCODE -ne 202 ] ; then
       echo "Error cloning Demo Git repository. Exiting"

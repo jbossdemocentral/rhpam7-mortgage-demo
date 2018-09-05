@@ -8,7 +8,6 @@ Param(
 # Additional properties
 $PROJECT_GIT_BRANCH="master"
 $PROJECT_GIT_DIR="$PROJECT_HOME\support\demo_project_git"
-$PROJECT_GIT_REPO_NAME="examples-rhpam7-mortgage-demo-repo.git"
 $OFFLINE_MODE="false"
 
 # wipe screen
