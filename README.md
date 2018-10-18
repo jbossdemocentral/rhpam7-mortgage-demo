@@ -8,8 +8,8 @@ Software
 --------
 The following software is required to run this demo:
 - [JBoss EAP 7.1 zip archive](https://developers.redhat.com/download-manager/file/jboss-eap-7.1.0.zip)
-- [Red Hat Process Automation Manager: Business Central 7.0.0.GA deployable for EE7](https://upload.wikimedia.org/wikipedia/commons/6/67/Learning_Curve_--_Coming_Soon_Placeholder.png)
-- [Red Hat Process Automation Manager: KIE-Server 7.0.0.GA deployable for EE7]((https://upload.wikimedia.org/wikipedia/commons/6/67/Learning_Curve_--_Coming_Soon_Placeholder.png))
+- [Red Hat Process Automation Manager: Business Central 7.1.0 deployable for EE7](https://developers.redhat.com/download-manager/file/rhpam-7.1.0-business-central-eap7-deployable.zip)
+- [Red Hat Process Automation Manager: KIE-Server 7.1.0 deployable for EE7]((https://developers.redhat.com/download-manager/file/rhpam-7.1.0-kie-server-ee7.zip))
 - Git client
 - [7-Zip](http://www.7-zip.org/download.html) (Windows only): to overcome the Windows 260 character path length limit, we need 7-Zip to unzip the Process Automation Manager deployable.
 
@@ -154,6 +154,8 @@ Released versions
 -----------------
 See the tagged releases for the following versions of the product:
 
+- v1.1 - Red Hat Process Automation Manager 7.1.0.GA
+- v1.0 - Red Hat Process Automation Manager 7.0.2.GA
 
 ![Mortgage Process](https://raw.githubusercontent.com/jbossdemocentral/rhpam7-mortgage-demo/master/docs/demo-images/mortgage-process.png)
 
