@@ -40,7 +40,7 @@ done
 echo
 echo "######################################################################"
 echo "##                                                                  ##"
-echo "##  Setting up the ${DEMO}                                 ##"
+echo "##  Setting up the ${DEMO}                                    ##"
 echo "##                                                                  ##"
 echo "##                                                                  ##"
 echo "##     ####  #   # ####   ###   #   #   #####    #   #              ##"
@@ -53,7 +53,7 @@ echo "##  brought to you by,                                              ##"
 echo "##             ${AUTHORS}                                              ##"
 echo "##                                                                  ##"
 echo "##                                                                  ##"
-echo "##  ${PROJECT}         ##"
+echo "##  ${PROJECT}        ##"
 echo "##                                                                  ##"
 echo "######################################################################"
 echo
@@ -162,7 +162,7 @@ touch $SERVER_DIR/kie-server.war.dodeploy
 echo
 echo "  - enabling demo accounts setup..."
 echo
-$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,user,kie-server,kiemgmt,rest-all --silent
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,broker,user,kie-server,kiemgmt,rest-all --silent
 $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u kieserver -p kieserver1! -ro kie-server --silent
 
 echo "  - setting up demo projects..."
