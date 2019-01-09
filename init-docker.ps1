@@ -63,7 +63,7 @@ Copy-Item "$SUPPORT_DIR\docker\.dockerignore" "$PROJECT_HOME" -force
 
 Write-Host "Starting Docker build.`n"
 
-$argList = "build --no-cache -t jbossdemocentral/rhpam7-mortgage-demo --build-arg PAM_VERSION=$PAM_VERSION --build-arg PAM_BUSINESS_CENTRAL=$PAM_BUSINESS_CENTRAL --build-arg PAM_KIE_SERVER=$PAM_KIE_SERVER --build-arg EAP=$EAP --build-arg JBOSS_EAP=$JBOSS_EAP --build-arg PROJECT_GIT_REPO=$PROJECT_GIT_REPO $PROJECT_HOME --build-arg NIOGIT_PROJECT_GIT_REPO=$NIOGIT_PROJECT_GIT_REPO"
+$argList = "build --no-cache -t jbossdemocentral/rhpam7-mortgage-demo --build-arg PAM_VERSION=$PAM_VERSION --build-arg PAM_BUSINESS_CENTRAL=$PAM_BUSINESS_CENTRAL --build-arg PAM_KIE_SERVER=$PAM_KIE_SERVER --build-arg EAP=$EAP --build-arg JBOSS_EAP=$JBOSS_EAP --build-arg PROJECT_GIT_REPO=$PROJECT_GIT_REPO --build-arg NIOGIT_PROJECT_GIT_REPO=$NIOGIT_PROJECT_GIT_REPO $PROJECT_HOME"
 $process = (Start-Process -FilePath docker.exe -ArgumentList $argList -Wait -PassThru -NoNewWindow)
 Write-Host "`n"
 
