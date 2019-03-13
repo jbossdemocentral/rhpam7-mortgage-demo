@@ -162,7 +162,7 @@ touch $SERVER_DIR/kie-server.war.dodeploy
 echo
 echo "  - enabling demo accounts setup..."
 echo
-$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,broker,user,kie-server,kiemgmt,rest-all --silent
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,broker,user,kie-server,kiemgmt,rest-all,Administrators --silent
 $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u kieserver -p kieserver1! -ro kie-server --silent
 
 echo "  - setting up demo projects..."

@@ -33,8 +33,8 @@ RUN unzip -qo /opt/jboss/$EAP -d $HOME && \
     rm -rf /opt/jboss/$PAM_BUSINESS_CENTRAL /opt/jboss/$PAM_KIE_SERVER /opt/jboss/$EAP $JBOSS_HOME/standalone/configuration/standalone_xml_history/
 
 # Add support files
-RUN $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,broker,user,kie-server,kiemgmt,rest-all --silent  && \
-  $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u adminUser -p test1234! -ro analyst,admin,manager,user,broker,kie-server,kiemgmt,rest-all --silent  && \
+RUN $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,broker,user,kie-server,kiemgmt,rest-all,Administrators --silent  && \
+  $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u adminUser -p test1234! -ro analyst,admin,manager,user,broker,kie-server,kiemgmt,rest-all,Administrators --silent  && \
   $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u kieserver -p kieserver1! -ro kie-server --silent
 
 COPY support/standalone-full.xml $JBOSS_HOME/standalone/configuration/
