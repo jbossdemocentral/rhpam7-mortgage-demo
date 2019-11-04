@@ -244,7 +244,7 @@ function create_projects() {
 
 function import_imagestreams_and_templates() {
   echo_header "Importing Image Streams"
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/rhpam73-image-streams.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/rhpam$PAM7_VERSION-image-streams.yaml
 
   echo ""
   echo "Fetching ImageStreams from registry."
@@ -252,15 +252,15 @@ function import_imagestreams_and_templates() {
   runSpinner 10
 
   #  Explicitly import the images. This is to overcome a problem where the image import gets a 500 error from registry.redhat.io when we deploy multiple containers at once.
-  oc import-image rhpam73-businesscentral-openshift:$IMAGE_STREAM_TAG —confirm -n ${PRJ[0]}
-  oc import-image rhpam73-kieserver-openshift:$IMAGE_STREAM_TAG —confirm -n ${PRJ[0]}
+  oc import-image rhpam-businesscentral-rhel8:$IMAGE_STREAM_TAG —confirm -n ${PRJ[0]}
+  oc import-image rhpam-kieserver-rhel8:$IMAGE_STREAM_TAG —confirm -n ${PRJ[0]}
 
   #  echo_header "Patching the ImageStreams"
   #  oc patch is/rhpam73-businesscentral-openshift --type='json' -p '[{"op": "replace", "path": "/spec/tags/0/from/name", "value": "registry.access.redhat.com/rhpam-7/rhpam73-businesscentral-openshift:1.0"}]'
   #  oc patch is/rhpam73-kieserver-openshift --type='json' -p '[{"op": "replace", "path": "/spec/tags/0/from/name", "value": "registry.access.redhat.com/rhpam-7/rhpam73-kieserver-openshift:1.0"}]'
 
   echo_header "Importing Templates"
-  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam73-authoring.yaml
+  oc create -f https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/$OPENSHIFT_PAM7_TEMPLATES_TAG/templates/rhpam$PAM7_VERSION-authoring.yaml
 }
 
 #Runs a spinner for the time passed to the function.
@@ -327,9 +327,10 @@ function create_application() {
 
   oc create configmap setup-demo-scripts --from-file=$SCRIPT_DIR/bc-clone-git-repository.sh,$SCRIPT_DIR/provision-properties-static.sh
 
-  oc new-app --template=rhpam73-authoring \
+  oc new-app --template=rhpam$PAM7_VERSION-authoring \
   -p APPLICATION_NAME="$ARG_DEMO" \
   -p IMAGE_STREAM_NAMESPACE="$IMAGE_STREAM_NAMESPACE" \
+  -p IMAGE_STREAM_TAG="$IMAGE_STREAM_TAG" \
   -p KIE_ADMIN_USER="$KIE_ADMIN_USER" \
   -p KIE_ADMIN_PWD="$KIE_ADMIN_PWD" \
   -p KIE_SERVER_CONTROLLER_USER="$KIE_SERVER_CONTROLLER_USER" \
@@ -339,6 +340,10 @@ function create_application() {
   -p BUSINESS_CENTRAL_HTTPS_SECRET="businesscentral-app-secret" \
   -p KIE_SERVER_HTTPS_SECRET="kieserver-app-secret" \
   -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi"
+
+  # Disable the OpenShift Startup Strategy and revert to the old Controller Strategy
+  oc set env dc/$ARG_DEMO-rhpamcentr KIE_WORKBENCH_CONTROLLER_OPENSHIFT_ENABLED=false
+  oc set env dc/$ARG_DEMO-kieserver KIE_SERVER_STARTUP_STRATEGY=ControllerBasedStartupStrategy KIE_SERVER_CONTROLLER_USER=$KIE_SERVER_CONTROLLER_USER KIE_SERVER_CONTROLLER_PWD=$KIE_SERVER_CONTROLLER_PWD KIE_SERVER_CONTROLLER_SERVICE=$ARG_DEMO-rhpamcentr KIE_SERVER_CONTROLLER_PROTOCOL=ws KIE_SERVER_ROUTE_NAME=insecure-$ARG_DEMO-kieserver
 
   # Give the system some time to create the DC, etc. before we trigger a deployment config change.
   sleep 5
