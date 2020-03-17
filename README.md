@@ -8,8 +8,8 @@ Software
 --------
 The following software is required to run this demo:
 - [JBoss EAP 7.2 zip archive](https://developers.redhat.com/download-manager/file/jboss-eap-7.2.0.zip)
-- [Red Hat Process Automation Manager: Business Central 7.5.0 deployable for EAP7](https://developers.redhat.com/download-manager/file/rhpam-7.5.0-business-central-eap7-deployable.zip)
-- [Red Hat Process Automation Manager: KIE-Server 7.5.0 deployable for EE8]((https://developers.redhat.com/download-manager/file/rhpam-7.5.0-kie-server-ee8.zip))
+- [Red Hat Process Automation Manager: Business Central 7.7.0 deployable for EAP7](https://developers.redhat.com/download-manager/file/rhpam-7.7.0-business-central-eap7-deployable.zip)
+- [Red Hat Process Automation Manager: KIE-Server 7.7.0 deployable for EE8]((https://developers.redhat.com/download-manager/file/rhpam-7.7.0-kie-server-ee8.zip))
 - Git client
 - [7-Zip](http://www.7-zip.org/download.html) (Windows only): to overcome the Windows 260 character path length limit, we need 7-Zip to unzip the Process Automation Manager deployable.
 
@@ -154,6 +154,7 @@ Released versions
 -----------------
 See the tagged releases for the following versions of the product:
 
+- v1.5 - Red Hat Process Automation Manager 7.7.0.GA
 - v1.4 - Red Hat Process Automation Manager 7.5.0.GA
 - v1.3 - Red Hat Process Automation Manager 7.3.0.GA
 - v1.2 - Red Hat Process Automation Manager 7.2.0.GA
