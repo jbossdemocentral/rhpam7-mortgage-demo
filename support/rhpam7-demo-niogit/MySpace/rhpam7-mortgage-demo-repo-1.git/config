@@ -9,9 +9,6 @@
 [remote "origin"]
 	url = https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo
 	fetch = +refs/heads/*:refs/remotes/origin/*
-[branch "pam77-upgrade"]
-	remote = origin
-	merge = refs/heads/pam77-upgrade
 [branch "dependabot/maven/com.thoughtworks.xstream-xstream-1.4.10-java7"]
 	remote = origin
 	merge = refs/heads/dependabot/maven/com.thoughtworks.xstream-xstream-1.4.10-java7
