@@ -1,7 +1,6 @@
 # pack-refs with: peeled
 11062fa6833d7263eeb1bd40f6ee4781d6704c12 refs/heads/dependabot/maven/com.thoughtworks.xstream-xstream-1.4.10-java7
-fe65f0f0866ef185c018f662c11bca608ccdddcd refs/heads/master
-b21b67ec719fc24b814780a5c66fea49768de748 refs/heads/pam77-upgrade
+9177b0d619ccfca541601ea4e86c5ec414267119 refs/heads/master
 11062fa6833d7263eeb1bd40f6ee4781d6704c12 refs/remotes/origin/dependabot/maven/com.thoughtworks.xstream-xstream-1.4.10-java7
 fe65f0f0866ef185c018f662c11bca608ccdddcd refs/remotes/origin/master
 b21b67ec719fc24b814780a5c66fea49768de748 refs/remotes/origin/pam77-upgrade
