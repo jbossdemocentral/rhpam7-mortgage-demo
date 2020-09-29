@@ -157,8 +157,8 @@ touch $JBOSS_HOME/standalone/deployments/kie-server.war.dodeploy
 
 echo "Red Hat Process Automation Manager Case Management installation running now..."
 echo
-unzip -qo $SRC_DIR/$RHPAM_ADDONS $RHPAM_CASE -d $SRC_DIR
-unzip -qo $SRC_DIR/$RHPAM_CASE -d target
+unzip -qo $SRC_DIR/$RHPAM_ADDONS $RHPAM_CASE -d $SRC_DIR && \
+unzip -qo $SRC_DIR/$RHPAM_CASE -d target && \
 rm $SRC_DIR/$RHPAM_CASE
 
 if [ $? -ne 0 ]; then
@@ -218,7 +218,7 @@ $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u caseSupplier -p redhatpam1
 
 if [ $? -ne 0 ]; then
 	echo
-	echo "Error occurred adding user caseSuplier!"
+	echo "Error occurred adding user caseSupplier!"
 	exit
 fi
 
