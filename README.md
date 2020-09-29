@@ -87,7 +87,7 @@ TODO: Installng on OpenShift Container Platform (CodeReady Containers)
 Install this demo on your local machine using an OpenShift Container Platform development cluster can be done using 
 CodeReady Continers. It's fully automated and delivers a fully functioning container-native development experience:
 
-[CodeReady Containers Quick Mortgage Demo](https://gitlab.com/redhatdemocentral/)
+[CodeReady Containers Mortgage Demo](https://gitlab.com/redhatdemocentral/crc-mortgage-demo)
 
 
 Installing on any OpenShift Container Platform (generic)
