@@ -134,12 +134,12 @@ See the tagged releases for the following versions of the product:
 
 - v1.0 - Red Hat Process Automation Manager 7.8.0.GA
 
-![Mortgage Process](https://raw.githubusercontent.com/jbossdemocentral/rhpam7-mortgage-demo/master/docs/demo-images/mortgage-process.png)
+![Mortgage Process](docs/demo-images/mortgage-process.png)
 
-![Mortgage Process Start](https://raw.githubusercontent.com/jbossdemocentral/rhpam7-mortgage-demo/master/docs/demo-images/mortgage-process-start.png)
+![Mortgage Process Start](docs/demo-images/mortgage-process-start.png)
 
-![Mortgage Process Appraise](https://raw.githubusercontent.com/jbossdemocentral/rhpam7-mortgage-demo/master/docs/demo-images/mortgage-process-appraise.png)
+![Mortgage Process Appraise](docs/demo-images/mortgage-process-appraise.png)
 
-![Mortgage Process Completed](https://raw.githubusercontent.com/jbossdemocentral/rhpam7-mortgage-demo/master/docs/demo-images/mortgage-process-completed.png)
+![Mortgage Process Completed](docs/demo-images/mortgage-process-completed.png)
 
-![RHPAM 7](https://raw.githubusercontent.com/jbossdemocentral/rhpam7-mortgage-demo/master/docs/demo-images/rhpam7.png)
+![RHPAM 7](docs/demo-images/rhpam7.png)
