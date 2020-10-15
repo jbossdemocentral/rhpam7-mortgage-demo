@@ -1,223 +1,332 @@
-#!/bin/sh
-. ./init-properties.sh
+#!/bin/sh 
+DEMO="Mortgage Demo"
+AUTHORS="Red Hat"
+PROJECT="git@github.com:jbossdemocentral/rhpam7-mortgage-demo.git"
+PRODUCT="Red Hat Process Automation Manager"
+JBOSS_HOME=./target/jboss-eap-7.3
+SERVER_DIR=$JBOSS_HOME/standalone/deployments
+SERVER_CONF=$JBOSS_HOME/standalone/configuration/
+SERVER_BIN=$JBOSS_HOME/bin
+SRC_DIR=./installs
+SUPPORT_DIR=./support
+PRJ_DIR=./projects
+VERSION_EAP=7.3.0
+VERSION=7.8.0
+EAP=jboss-eap-$VERSION_EAP.zip
+RHPAM=rhpam-$VERSION-business-central-eap7-deployable.zip
+RHPAM_KIE_SERVER=rhpam-$VERSION-kie-server-ee8.zip
+RHPAM_ADDONS=rhpam-$VERSION-add-ons.zip
+RHPAM_CASE=rhpam-$VERSION-case-mgmt-showcase-eap7-deployable.zip
 
-# Additional properties
-PROJECT_GIT_BRANCH=master
-PROJECT_GIT_DIR=./support/demo_project_git
-OFFLINE_MODE=false
+# project details.
+PROJECT_GIT_DIR=$SUPPORT_DIR/rhpam7-temp-git-dir
+PROJECT_GIT_REPO="https://github.com/jbossdemocentral/rhpam7-mortgage-demo-repo.git"
+PROJECT_GIT_REPO_NAME=rhpam7-mortgage-demo-repo.git
+NIOGIT_PROJECT_GIT_REPO="MySpace/$PROJECT_GIT_REPO_NAME"
 
 # wipe screen.
-clear
-
-function usage {
-      echo "Usage: init.sh [args...]"
-      echo "where args include:"
-      echo "    -o              run this script in offline mode. The project's Git repo will not be downloaded. Instead a cached version will be used if available."
-      echo "    -h              prints this help."
-}
-
-#Parse the params
-while getopts "oh" opt; do
-  case $opt in
-    o)
-      OFFLINE_MODE=true
-      ;;
-    h)
-      usage
-      exit 0
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
+clear 
 
 echo
-echo "######################################################################"
-echo "##                                                                  ##"
-echo "##  Setting up the ${DEMO}                                    ##"
-echo "##                                                                  ##"
-echo "##                                                                  ##"
-echo "##     ####  #   # ####   ###   #   #   #####    #   #              ##"
-echo "##     #   # #   # #   # #   # # # # #     #      # #               ##"
-echo "##     ####  ##### ####  ##### #  #  #   ###       #                ##"
-echo "##     # #   #   # #     #   # #     #   #        # #               ##"
-echo "##     #  #  #   # #     #   # #     #  #     #  #   #              ##"
-echo "##                                                                  ##"
-echo "##  brought to you by,                                              ##"
-echo "##             ${AUTHORS}                                              ##"
-echo "##                                                                  ##"
-echo "##                                                                  ##"
-echo "##  ${PROJECT}        ##"
-echo "##                                                                  ##"
-echo "######################################################################"
+echo "###################################################################"
+echo "##                                                               ##"   
+echo "##  Setting up the                                               ##"
+echo "##                                                               ##"   
+echo "##             ####  ##### ####     #   #  ###  #####            ##"
+echo "##             #   # #     #   #    #   # #   #   #              ##"
+echo "##             ####  ###   #   #    ##### #####   #              ##"
+echo "##             #  #  #     #   #    #   # #   #   #              ##"
+echo "##             #   # ##### ####     #   # #   #   #              ##"
+echo "##                                                               ##"
+echo "##           ####  ####   ###   #### #####  ####  ####           ##"
+echo "##           #   # #   # #   # #     #     #     #               ##"
+echo "##           ####  ####  #   # #     ###    ###   ###            ##"
+echo "##           #     #  #  #   # #     #         #     #           ##"
+echo "##           #     #   #  ###   #### ##### ####  ####            ##"
+echo "##                                                               ##"
+echo "##   ###  #   # #####  ###  #   #  ###  ##### #####  ###  #   #  ##"
+echo "##  #   # #   #   #   #   # ## ## #   #   #     #   #   # ##  #  ##"
+echo "##  ##### #   #   #   #   # # # # #####   #     #   #   # # # #  ##"
+echo "##  #   # #   #   #   #   # #   # #   #   #     #   #   # #  ##  ##"
+echo "##  #   # #####   #    ###  #   # #   #   #   #####  ###  #   #  ##"
+echo "##                                                               ##"
+echo "##           #   #  ###  #   #  ###  ##### ##### ####            ##"
+echo "##           ## ## #   # ##  # #   # #     #     #   #           ##"
+echo "##           # # # ##### # # # ##### #  ## ###   ####            ##"
+echo "##           #   # #   # #  ## #   # #   # #     #  #            ##"
+echo "##           #   # #   # #   # #   # ##### ##### #   #           ##"
+echo "##                                                               ##"   
+echo "##  brought to you by, ${AUTHORS}                                   ##"
+echo "##                                                               ##"   
+echo "##  ${PROJECT}     ##"
+echo "##                                                               ##"   
+echo "###################################################################"
 echo
 
-# make some checks first before proceeding.
-if [ -r $SRC_DIR/$EAP ] || [ -L $SRC_DIR/$EAP ]; then
-	 echo Product sources are present...
-	 echo
+# make some checks first before proceeding.	
+if [ -r $SUPPORT_DIR ] || [ -L $SUPPORT_DIR ]; then
+        echo "Support dir is presented..."
+        echo
 else
-	echo Need to download $EAP package from http://developers.redhat.com
-	echo and place it in the $SRC_DIR directory to proceed...
+        echo "$SUPPORT_DIR wasn't found. Please make sure to run this script inside the demo directory."
+        echo
+        exit
+fi
+
+if [ -r $SRC_DIR/$EAP ] || [ -L $SRC_DIR/$EAP ]; then
+	echo "Product EAP sources are present..."
+	echo
+else
+	echo "Need to download $EAP package from https://developers.redhat.com/products/eap/download"
+	echo "and place it in the $SRC_DIR directory to proceed..."
 	echo
 	exit
 fi
 
-#if [ -r $SRC_DIR/$EAP_PATCH ] || [ -L $SRC_DIR/$EAP_PATCH ]; then
-#	echo Product patches are present...
-#	echo
-#else
-#	echo Need to download $EAP_PATCH package from the Customer Portal
-#	echo and place it in the $SRC_DIR directory to proceed...
-#	echo
-#	exit
-#fi
-
-if [ -r $SRC_DIR/$PAM_BUSINESS_CENTRAL ] || [ -L $SRC_DIR/$PAM_BUSINESS_CENTRAL ]; then
-		echo Product sources are present...
-		echo
+if [ -r $SRC_DIR/$RHPAM ] || [ -L $SRC_DIR/$RHPAM ]; then
+	echo "Product Red Hat Process Automation Manager sources are present..."
+	echo
 else
-		echo Need to download $PAM_BUSINESS_CENTRAL zip from http://developers.redhat.com
-		echo and place it in the $SRC_DIR directory to proceed...
-		echo
-		exit
+	echo "Need to download $RHPAM package from https://developers.redhat.com/products/rhpam/download"
+	echo "and place it in the $SRC_DIR directory to proceed..."
+	echo
+	exit
 fi
 
-#if [ -r $SRC_DIR/$BA_MONITORINGL ] || [ -L $SRC_DIR/$BA_MONITORING ]; then
-#		echo Product sources are present...
-#		echo
-#else
-#		echo Need to download $BA_MONITORING zip from http://developers.redhat.com
-#		echo and place it in the $SRC_DIR directory to proceed...
-#		echo
-#		exit
-#fi
-
-if [ -r $SRC_DIR/$PAM_KIE_SERVER ] || [ -L $SRC_DIR/$PAM_KIE_SERVER ]; then
-		echo Product sources are present...
-		echo
+if [ -r $SRC_DIR/$RHPAM_KIE_SERVER ] || [ -L $SRC_DIR/$RHPAM_KIE_SERVER ]; then
+	echo "Product Red Hat Process Automation Manager KIE Server sources are present..."
+	echo
 else
-		echo Need to download $PAM_KIE_SERVER zip from http://developers.redhat.com
-		echo and place it in the $SRC_DIR directory to proceed...
-		echo
-		exit
+	echo "Need to download $RHPAM_KIE_SERVER package from https://developers.redhat.com/products/rhpam/download"
+	echo "and place it in the $SRC_DIR directory to proceed..."
+	echo
+	exit
+fi
+
+if [ -r $SRC_DIR/$RHPAM_ADDONS ] || [ -L $SRC_DIR/$RHPAM_ADDONS ]; then
+	echo "Product Red Hat Process Automation Manager Case Management sources are present..."
+	echo
+else
+	echo "Need to download $RHPAM_ADDONS package from https://developers.redhat.com/products/rhpam/download"
+	echo "and place it in the $SRC_DIR directory to proceed..."
+	echo
+	exit
 fi
 
 # Remove the old JBoss instance, if it exists.
 if [ -x $JBOSS_HOME ]; then
-	echo "  - removing existing JBoss product..."
-	echo
-	rm -rf $JBOSS_HOME
+		echo "  - removing existing JBoss product..."
+		echo
+		rm -rf $JBOSS_HOME
 fi
 
-# Run installers.
-echo "Provisioning JBoss EAP now..."
+# Installation.
+echo "JBoss EAP installation running now..."
 echo
-unzip -qo $SRC_DIR/$EAP -d $TARGET
+mkdir -p ./target
+unzip -qo $SRC_DIR/$EAP -d target
 
 if [ $? -ne 0 ]; then
 	echo
-	echo Error occurred during JBoss EAP installation!
+	echo "Error occurred during JBoss EAP installation!"
 	exit
 fi
 
-#echo
-#echo "Applying JBoss EAP 6.4.7 patch now..."
-#echo
-#$JBOSS_HOME/bin/jboss-cli.sh --command="patch apply $SRC_DIR/$EAP_PATCH"
-#
-#if [ $? -ne 0 ]; then
-#	echo
-#	echo Error occurred during JBoss EAP patching!
-#	exit
-#fi
-
+echo "Red Hat Process Automation Manager installation running now..."
 echo
-echo "Deploying Red Hat Business Automation Manager: Business Central now..."
-echo
-unzip -qo $SRC_DIR/$PAM_BUSINESS_CENTRAL -d $TARGET
+unzip -qo $SRC_DIR/$RHPAM -d target
 
 if [ $? -ne 0 ]; then
-	echo Error occurred during $PRODUCT installation
+	echo
+	echo "Error occurred during Red Hat Process Manager installation!"
 	exit
 fi
 
+echo "Red Hat Process Automation Manager Kie Server installation running now..."
 echo
-echo "Deploying Red Hat Business Automation Manager: Process Server now..."
-echo
-unzip -qo $SRC_DIR/$PAM_KIE_SERVER -d $SERVER_DIR
+unzip -qo $SRC_DIR/$RHPAM_KIE_SERVER  -d $JBOSS_HOME/standalone/deployments 
 
 if [ $? -ne 0 ]; then
-	echo Error occurred during $PRODUCT installation
+	echo
+	echo "Error occurred during Red Hat Process Manager Kie Server installation!"
 	exit
 fi
-touch $SERVER_DIR/kie-server.war.dodeploy
 
+# Set deployment Kie Server.
+touch $JBOSS_HOME/standalone/deployments/kie-server.war.dodeploy
+
+echo "Red Hat Process Automation Manager Case Management installation running now..."
 echo
-echo "  - enabling demo accounts setup..."
+unzip -qo $SRC_DIR/$RHPAM_ADDONS $RHPAM_CASE -d $SRC_DIR && \
+unzip -qo $SRC_DIR/$RHPAM_CASE -d target && \
+rm $SRC_DIR/$RHPAM_CASE
+
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred during Red Hat Process Manager Case Management installation!"
+	exit
+fi
+
+# Set deployment Case Management.
+touch $JBOSS_HOME/standalone/deployments/rhpam-case-mgmt-showcase.war.dodeploy
+
+echo "  - enabling demo accounts role setup..."
 echo
-$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,broker,user,kie-server,kiemgmt,rest-all,Administrators --silent
+echo "  - adding user 'pamAdmin' with password 'redhatpam1!'..."
+echo
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u pamAdmin -p redhatpam1! -ro analyst,admin,manager,user,kie-server,kiemgmt,rest-all,broker,Administrators --silent
+
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred adding user pamAdmin!"
+	exit
+fi
+
+echo "  - adding user 'kieserver' with password 'kieserver1!'..."
+echo
 $JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u kieserver -p kieserver1! -ro kie-server --silent
 
-echo "  - setting up demo projects..."
-echo
-# Copy the default (internal) BPMSuite repo's.
-rm -rf $SERVER_BIN/.niogit && mkdir -p $SERVER_BIN/.niogit && cp -r $SUPPORT_DIR/rhpam7-demo-niogit/* $SERVER_BIN/.niogit
-# Copy the demo project repo.
-if ! $OFFLINE_MODE
-then
-  # Not in offline mode, so downloading the latest repo. We first download the repo in a temp dir and we only delete the old, cached repo, when the download is succesful.
-  echo "  - cloning the project's Git repo from: $PROJECT_GIT_REPO"
-  echo
-#  rm -rf ./target/temp && git clone --bare $PROJECT_GIT_REPO ./target/temp/bpms-specialtripsagency.git || { echo; echo >&2 "Error cloning the project's Git repo. If there is no Internet connection available, please run this script in 'offline-mode' ('-o') to use a previously downloaded and cached version of the project's Git repo... Aborting"; echo; exit 1; }
-  rm -rf ./target/temp && git clone -b $PROJECT_GIT_BRANCH --single-branch $PROJECT_GIT_REPO ./target/temp/$PROJECT_GIT_REPO_NAME || { echo; echo >&2 "Error cloning the project's Git repo. If there is no Internet connection available, please run this script in 'offline-mode' ('-o') to use a previously downloaded and cached version of the project's Git repo... Aborting"; echo; exit 1; }
-  pushd ./target/temp/$PROJECT_GIT_REPO_NAME
-  # rename the checked-out branch to master.
-  echo "Renaming cloned branch '$PROJECT_GIT_BRANCH' to 'master'."
-  git branch -m $PROJECT_GIT_BRANCH master
-  popd
-
-  echo "  - replacing cached project git repo: $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME"
-  echo
-#  rm -rf $PROJECT_GIT_DIR/bpms-specialtripsagency.git && mkdir -p $PROJECT_GIT_DIR && cp -R target/temp/bpms-specialtripsagency.git $PROJECT_GIT_DIR/bpms-specialtripsagency.git && rm -rf ./target/temp
-  # Make a bare clone of the Git repo.
-  rm -rf $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME && mkdir -p $PROJECT_GIT_DIR && git clone --bare target/temp/$PROJECT_GIT_REPO_NAME $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME && rm -rf ./target/temp
-else
-  echo "  - running in offline-mode, using cached project's Git repo."
-  echo
-  if [ ! -d "$PROJECT_GIT_DIR" ]
-  then
-    echo "No project Git repo found. Please run the script without the 'offline' ('-o') option to automatically download the required Git repository!"
-    echo
-    exit 1
-  fi
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred adding user kieserver!"
+	exit
 fi
-# Copy the repo to the JBoss BPMSuite installation directory.
-rm -rf $SERVER_BIN/.niogit/$NIOGIT_PROJECT_GIT_REPO && cp -R $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME $SERVER_BIN/.niogit/$NIOGIT_PROJECT_GIT_REPO
+
+echo "  - adding user 'caseUser' with password 'redhatpam1!'..."
+echo
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u caseUser -p redhatpam1! -ro user --silent
+
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred adding user caseUser!"
+	exit
+fi
+
+echo "  - adding user 'caseManager' with password 'redhatpam1!'..."
+echo
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u caseManager -p redhatpam1! -ro user,manager --silent
+
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred adding user caseManager!"
+	exit
+fi
+
+echo "  - adding user 'caseSupplier' with password 'redhatpam1!'..."
+echo
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u caseSupplier -p redhatpam1! -ro user,supplier --silent
+
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred adding user caseSupplier!"
+	exit
+fi
 
 echo "  - setting up standalone.xml configuration adjustments..."
 echo
 cp $SUPPORT_DIR/standalone-full.xml $SERVER_CONF/standalone.xml
 
-echo "  - setup email notification users..."
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred setting up standalone.xml!"
+	exit
+fi
+
+echo "  - setup email task notification users..."
 echo
 cp $SUPPORT_DIR/userinfo.properties $SERVER_DIR/business-central.war/WEB-INF/classes/
 
-# Add execute permissions to the standalone.sh script.
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred setting up email users!"
+	exit
+fi
+
 echo "  - making sure standalone.sh for server is executable..."
 echo
 chmod u+x $JBOSS_HOME/bin/standalone.sh
 
-echo "You can now start the $PRODUCT with $SERVER_BIN/standalone.sh"
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred on making standalone.sh executable!"
+	exit
+fi
+
+echo "  - setting up demo project..."
 echo
-echo "Login to http://localhost:8080/business-central   (u:pamAdmin / p:redhatpam1!)"
+echo "  - copying internal provided repository instead...."
+echo
+rm -rf $SERVER_BIN/.niogit && \
+mkdir -p $SERVER_BIN/.niogit && \
+cp -r $SUPPORT_DIR/rhpam7-demo-niogit/* $SERVER_BIN/.niogit
+	
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred setting up internal provided project repository!"
+	exit
+fi
+
+echo "  - trying to pull the project's repository from: $PROJECT_GIT_REPO"
+echo
+rm -rf ./target/temp
+git clone $PROJECT_GIT_REPO ./target/temp/$PROJECT_GIT_REPO_NAME
+
+if [ $? -ne 0 ]; then
+	echo
+	echo "Error occurred trying to pull the project's remote repository!"
+	echo "Note: project repository not reachable, so continuing with internal repository!"
+	echo
+
+else
+		
+	echo
+	echo "  - making bare clone of project git repo: $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME ..."
+	echo
+	rm -rf $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME && \
+	mkdir -p $PROJECT_GIT_DIR && \
+	git clone --bare target/temp/$PROJECT_GIT_REPO_NAME $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME && \
+  rm -rf ./target/temp
+		
+	if [ $? -ne 0 ]; then
+		echo
+		echo "Error occurred trying to make bare clone of project repository!"
+		exit
+	fi
+		
+  # cleanup temp directory.
+	echo
+	echo "  - copy the repo to the installation directory..."
+	echo
+	rm -rf $SERVER_BIN/.niogit/MySpace/*.git && \
+	cp -R $PROJECT_GIT_DIR/$PROJECT_GIT_REPO_NAME $SERVER_BIN/.niogit/$NIOGIT_PROJECT_GIT_REPO
+
+	if [ $? -ne 0 ]; then
+		echo
+		echo "Error occurred trying to copy repo to installation directory!"
+		exit
+	fi
+
+	rm -rf $PROJECT_GIT_DIR
+fi
+  
+echo
+echo "=============================================================="
+echo "=                                                            ="
+echo "=  $PRODUCT $VERSION setup complete.  ="
+echo "=                                                            ="
+echo "=  Start $PRODUCT with:            ="
+echo "=                                                            ="
+echo "=           $SERVER_BIN/standalone.sh         ="
+echo "=                                                            ="
+echo "=  Log in to Red Hat Process Automation Manager to start     ="
+echo "=  working with the mortage demo project:                    ="
+echo "=                                                            ="
+echo "=  http://localhost:8080/business-central                    ="
+echo "=                                                            ="
+echo "=    Log in: [ u:pamAdmin / p:redhatpam1! ]                  ="
+echo "=                                                            ="
+echo "=  See Readme.md for details on running demo project.        ="
+echo "=                                                            ="
+echo "=============================================================="
 echo
 
-echo "$PRODUCT $VERSION $DEMO Setup Complete."
-echo
