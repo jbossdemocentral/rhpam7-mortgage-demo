@@ -19,7 +19,8 @@ Installing on local machine
 
 Follow install output instructions and log in to http://localhost:8080/business-central (u:pamAdmin / p:redhatpam1!)
 
-Enjoy installed and configured Red Hat Process Automation Manager Mortgage Demo (see below for how to run demo).
+Enjoy installed and configured Red Hat Process Automation Manager Mortgage Demo (see below for how to run demo). If you need 
+more help, see the [install video](https://youtu.be/prlIWwtCsCI).
 
 
 Running the demo
@@ -125,7 +126,7 @@ Note that the entire demo is running default in memory, restart server, lose you
 
 Supporting Articles
 -------------------
-- TBD...
+- [Video - Red Hat Process Automation Manager Mortgage Demo](https://youtu.be/prlIWwtCsCI)
 
 
 Released versions
@@ -133,6 +134,8 @@ Released versions
 See the tagged releases for the following versions of the product:
 
 - v1.0 - Red Hat Process Automation Manager 7.8.0.GA
+
+![Mortgage Video](docs/demo-images/mortgage-video.png)
 
 ![Mortgage Process](docs/demo-images/mortgage-process.png)
 
