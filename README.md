@@ -17,7 +17,7 @@ Installing on local machine
 
 3. Run 'init.sh' or 'init.bat' file. 'init.bat' must be run with Administrative privileges.
 
-Follow install output instructions and log in to http://localhost:8080/business-central (u:dmAdmin / p:redhatpam1!)
+Follow install output instructions and log in to http://localhost:8080/business-central (u:pamAdmin / p:redhatpam1!)
 
 Enjoy installed and configured Red Hat Process Automation Manager Mortgage Demo (see below for how to run demo).
 
