@@ -82,7 +82,7 @@ Running the demo
     explore, modify rules, redeploy the process, and try any combminations you like. 
 
 
-TODO: Installng on OpenShift Container Platform (CodeReady Containers)
+Installng on OpenShift Container Platform (CodeReady Containers)
 ----------------------------------------------------------------
 Install this demo on your local machine using an OpenShift Container Platform development cluster can be done using 
 CodeReady Continers. It's fully automated and delivers a fully functioning container-native development experience:
