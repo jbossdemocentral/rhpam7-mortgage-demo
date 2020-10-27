@@ -138,6 +138,8 @@ See the tagged releases for the following versions of the product:
 
 ![Mortgage Process Start](docs/demo-images/mortgage-process-start.png)
 
+![Mortgage Process Task](docs/demo-images/mortgage-process-task.png)
+
 ![Mortgage Process Appraise](docs/demo-images/mortgage-process-appraise.png)
 
 ![Mortgage Process Completed](docs/demo-images/mortgage-process-completed.png)
