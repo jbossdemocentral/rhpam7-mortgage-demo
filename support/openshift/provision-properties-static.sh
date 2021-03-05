@@ -1,9 +1,9 @@
 PRJ_NAME="rhpam7-mortgage"
 PRJ_DESCRIPTION="Red Hat Process Automation Manager 7 Mortgage Demo"
 #GitHub tag referencing the image streams and templates.
-OPENSHIFT_PAM7_TEMPLATES_TAG=7.7.0.GA
-IMAGE_STREAM_TAG=7.7.0
-PAM7_VERSION=77
+OPENSHIFT_PAM7_TEMPLATES_TAG=7.10.0.GA
+IMAGE_STREAM_TAG=7.10.0
+PAM7_VERSION=710
 
 # For bc-clone-git-repository script.
 BUSINESS_CENTRAL_REST_URL="http://$PRJ_NAME-rhpamcentr:8080/rest"

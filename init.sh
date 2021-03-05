@@ -11,7 +11,7 @@ SRC_DIR=./installs
 SUPPORT_DIR=./support
 PRJ_DIR=./projects
 VERSION_EAP=7.3.0
-VERSION=7.8.0
+VERSION=7.10.0
 EAP=jboss-eap-$VERSION_EAP.zip
 RHPAM=rhpam-$VERSION-business-central-eap7-deployable.zip
 RHPAM_KIE_SERVER=rhpam-$VERSION-kie-server-ee8.zip
@@ -184,7 +184,7 @@ fi
 
 echo "  - adding user 'kieserver' with password 'kieserver1!'..."
 echo
-$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u kieserver -p kieserver1! -ro kie-server --silent
+$JBOSS_HOME/bin/add-user.sh -a -r ApplicationRealm -u kieserver -p kieserver1! -ro kie-server,rest-all --silent
 
 if [ $? -ne 0 ]; then
 	echo
